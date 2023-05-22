@@ -1,60 +1,76 @@
+
 #include<bits/stdc++.h>
 using namespace std;
 
-void init_code() {
-#ifndef ONLINE_JUDGE
-	freopen("input.txt", "r", stdin);
-	freopen("output.txt", "w", stdout);
-#endif
+//A*
+void printpath(vector<int>parent, int dest) {
+	if (parent[dest] == -1) {
+		cout << "No path from src to dest";
+		return;
+	}
+
+	vector<int>path;
+
+	for (int curr = dest; curr != -1; curr = parent[curr]) {
+		path.push_back(curr);
+	}
+	reverse(path.begin(), path.end());
+
+	for (int node : path) {
+		cout << node << " ";
+	}
+	cout << endl;
 }
 
-//A*
 void fun(vector<vector<pair<int, int>>>&graph, int src, int dest, int n) {
 
 	vector<int>dist(n + 1, INT_MAX);
-	vector<int>k(n + 1);
+	vector<int>heuristic(n + 1);
+	vector<int>parent(n + 1, -1);
 
 	dist[src] = 0;
 
 	cout << "Enter the heuristic values for each node:" << endl;
 	for (int i = 1; i <= n; i++) {
-		cin >> k[i];
+		cin >> heuristic[i];
 	}
 
 	priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-	pq.push({0, src});
+
+	// {fn, node};
+	pq.push({0 + heuristic[src], src});
 
 	while (!pq.empty()) {
 		int u = pq.top().second;
 		pq.pop();
 
 		if (u == dest) break;
-		for (auto i : graph[u]) {
-			int v = i.first;
-			int wt = i.second;
+		for (int i = 0; i < graph[u].size(); i++) {
+			int v = graph[u][i].first; // b
+			int wt = graph[u][i].second; // 4
 
 			int gn = dist[u] + wt;
-			int hn = k[v];
-
-			if (gn + hn < dist[v]) {
+			int hn = heuristic[v];
+			int fn = gn + hn;
+			if (gn < dist[v]) {
 				dist[v] = gn;
-				pq.push({gn + hn, v});
+				parent[v] = u;
+				pq.push({fn, v});
 			}
 		}
 	}
 	if (dist[dest] != INT_MAX) {
 		cout << dist[dest] << endl;
-	} else {
+	}
+	else {
 		cout << "not reachable" << endl;
 	}
-	for (int i = 1; i < dist.size(); i++) {
-		cout << src << " to " << i << " : " << dist[i] << " : " << k[i] << endl;
-	}
+	printpath(parent, dest);
 }
 
 int main() {
-	init_code();
-	int n, m;
+	//init_code();
+	int n, m; // no. of nodes / edges
 	cin >> n >> m;
 
 	vector<vector<pair<int, int>>>graph(n + 1);
@@ -67,9 +83,27 @@ int main() {
 
 	int src, dest;
 	cin >> src >> dest;
-
 	fun(graph, src, dest, n);
-
 	return 0;
 }
+// input :
+// 7 9
+// 1 2 4
+// 1 3 3
+// 3 4 7
+// 4 5 2
+// 3 5 10
+// 2 5 12
+// 2 6 5
+// 6 7 16
+// 5 7 5
+// 1 7
+// 14
+// 12
+// 11
+// 6
+// 4
+// 11
+// 0
+
 
