@@ -1,45 +1,61 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+void init_code() {
+#ifndef ONLINE_JUDGE
+	freopen("input.txt", "r", stdin);
+	freopen("output.txt", "w", stdout);
+#endif
+}
+
 void prims(vector<vector<pair<int, int>>>&graph, int src, int n) {
-	vector<int>key(n, INT_MAX);
-	vector<int>parent(n, -1);
+	vector<int>parent(n + 1, -1);
+	vector<int>vis(n + 1, 0);
 
+	// {wt, node}
 	priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-
-	key[src]  = 0;
+	
 	pq.push({0, src});
-
+	int sum = 0;
+	
 	while (!pq.empty()) {
 		int u = pq.top().second;
+		int wt = pq.top().first;
 		pq.pop();
 
-		for (auto& i : graph[u]) {
+		if (vis[u] == 1) continue;
+		vis[u] = 1;
+		sum += wt;
+		cout << sum << endl;
+		for (auto i : graph[u]) {
 			int v = i.first;
-			int wt = i.second;
+			int edgWt = i.second;
 
-			if (wt < key[v]) {
-				key[v] = wt;
+			if (!vis[v]) {
+				pq.push({edgWt, v});
 				parent[v] = u;
-				pq.push({key[v], v});
 			}
 		}
 	}
-	for (int i = 1; i < n; i++) {
+	cout << sum << endl;
+	for (int i = 2; i <= n; i++) {
 		cout << parent[i] << " - " << i << endl;
 	}
 
 }
 int main() {
 	init_code();
-	int n, m; // n = number of nodes, m = number of edges
+	int n, m;
 	cin >> n >> m;
-
-	vector<vector<pair<int, int>>>graph(n); // adjacency list to store graph
-
+	vector<vector<pair<int, int>>>graph(n + 1);
 	for (int i = 0; i < m; i++) {
-		int u, v, wt; // edge between node u and node v with weight w
+		int u, v, wt;
 		cin >> u >> v >> wt;
 		graph[u].push_back({v, wt});
-		graph[v].push_back({u, wt}); // adding both ways for undirected graph
+		graph[v].push_back({u, wt});
 	}
-	prims(graph, 0, n);
-	return 0;
+	int src;
+	cin >> src;
+	prims(graph, src, n);
+
 }
