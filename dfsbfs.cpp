@@ -2,11 +2,11 @@
 vector<int>vis(100000,0);
 
 void dfs(vector<vector<int>>& graph, int node) {
-    visited[node] = 1;
+    vis[node] = 1;
     cout << node << " ";
 
     for (int child : graph[node]) {
-        if (!visited[child]) {
+        if (!vis[child]) {
             dfs(graph, child);
         }
     }
