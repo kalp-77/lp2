@@ -1,10 +1,8 @@
 const int INF = INT_MAX;
 int parent[10000];
-int sz[10000];
 
 void make(int v) {
 	parent[v] = v;
-	sz[v] = 1;
 }
 int find(int v) {
 	if (parent[v] == v) {
@@ -16,11 +14,7 @@ void unionn(int a, int b) {
 	a = find(a);
 	b = find(b);
 	if (a != b) {
-		if (sz[a] < sz[b]) {
-			swap(a, b);
-		}
 		parent[b] = a;
-		sz[a] += sz[b];
 	}
 }
 
