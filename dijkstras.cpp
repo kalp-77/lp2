@@ -55,7 +55,7 @@ void dij(vector<vector<pair<int,int>>>& graph, int src, int dest, int n) {
         }
         else cout << "Not reachable" << endl;
     }
-    cout<<dist[dest]<<endl;
+    cout<<"minimum cost from src to dest : " << dist[dest]<<endl;
 }
 int main() {
 
