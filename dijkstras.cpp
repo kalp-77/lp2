@@ -1,6 +1,13 @@
-#include iostream;
+
+#include<bits/stdc++.h>
 using namespace std;
 
+// void init_code() {
+// #ifndef ONLINE_JUDGE
+// 	freopen("input.txt", "r", stdin);
+// 	freopen("output.txt", "w", stdout);
+// #endif
+// }
 
 
 const int INF = INT_MAX;
@@ -9,58 +16,64 @@ void printpath(vector<int>parent, int dest) {
 		cout << "No path from src to dest";
 		return;
 	}
-
 	vector<int>path;
-
-	for (int curr = dest; curr != -1; curr = parent[i]) {
+	for (int curr = dest; curr != -1; curr = parent[curr]) {
 		path.push_back(curr);
 	}
 	reverse(path.begin(), path.end());
 
+	cout << "Shortest Path : ";
+	int sum = 0;
 	for (int node : path) {
+		sum += node;
 		cout << node << " ";
 	}
 	cout << endl;
+	cout << "shortest path sum : " << sum << endl;
 }
+
 void dij(vector<vector<pair<int, int>>>& graph, int src, int dest, int n) {
-	vector<int>dis(n, INF);
-	vector<int>parent(n, -1);
-	vector<int>vis(n, false);
+	vector<int>dist(n + 1, INF);
+	vector<int>parent(n + 1, -1);
+	vector<int>vis(n + 1, 0);
 
 	priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-
-	pq.push(src);
+	// {wt, node}
+	pq.push({0, src});
 	dist[src] = 0;
 	while (!pq.empty()) {
 		int node = pq.top().second;
 		pq.pop();
 
-
 		if (vis[node]) continue;
-		vis[node] = true;
+		vis[node] = 1;
 
-		for (auto i : graph[node]) {
-			int child = i.first;
-			int wt = i.second;
+		for (int i = 0; i < graph[node].size(); i++) {
+
+			int child = graph[node][i].first;
+			int wt = graph[node][i].second;
+
 			if (dist[node] + wt < dist[child] && !vis[child]) {
 				dist[child] = dist[node] + wt;
-				pq.push({dist[child], wt});
+				pq.push({dist[child], child});
 				parent[child] = node;
 			}
 		}
 	}
+	printpath(parent, dest);
 
 }
 
 int main() {
+	//init_code();
 	int n, m;
 	cin >> n >> m;
-	vector<vector<pair<int, int>>> graph(n);
+	vector<vector<pair<int, int>>> graph(n + 1);
 	for (int i = 0; i < m; i++) {
-		int u, v, w;
-		cin >> u >> v >> w;
-		graph[u].push_back({v, w});
-		graph[v].push_back({u, w});
+		int u, v, wt;
+		cin >> u >> v >> wt;
+		graph[u].push_back({v, wt});
+		graph[v].push_back({u, wt});
 	}
 
 	int src, dest;
@@ -68,4 +81,5 @@ int main() {
 
 	dij(graph, src, dest, n);
 
+	return 0;
 }
