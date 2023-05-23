@@ -23,13 +23,10 @@ void printpath(vector<int>parent, int dest) {
 	reverse(path.begin(), path.end());
 
 	cout << "Shortest Path : ";
-	int sum = 0;
 	for (int node : path) {
-		sum += node;
 		cout << node << " ";
 	}
 	cout << endl;
-	cout << "shortest path sum : " << sum << endl;
 }
 
 void dij(vector<vector<pair<int, int>>>& graph, int src, int dest, int n) {
