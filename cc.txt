@@ -1,0 +1,20 @@
+Flask==2.2.2
+runtime: python39
+
+handlers:
+- url: /.*
+  script: None
+  
+from flask import Flask
+app = Flask(__name__)
+@app.route('/')
+def hello():
+    return "Hello World"
+    
+    
+script to install owncloud on ubuntu 22.04 download the script:
+curl https://sdk.cloud.google.com | bash
+
+1. wget https://raw.githubusercontent.com/linuxsyr/owncloud/main/owncloud.bash
+2. chmod +x owncloud.bash
+3. sudo bash ./owncloud.bash
